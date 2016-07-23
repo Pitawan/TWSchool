@@ -1,5 +1,6 @@
 package tw.pitawanpor.twschool;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.internal.view.ViewPropertyAnimatorCompatSet;
@@ -16,5 +17,6 @@ public class MainActivity extends AppCompatActivity {
     //Get Event from Click
     public void clickSignUpMain(View view) {
 
+        startActivity(new Intent(MainActivity.this,SignUpActivity.class));
     }
 }   // Main Class นี่คือคลาสหลัก
