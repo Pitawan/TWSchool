@@ -119,6 +119,22 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(context, "Welcome " + loginStrings[1] + " " + loginStrings[2],
                             Toast.LENGTH_SHORT).show();
 
+                    // Intent to Service
+                    switch (Integer.parseInt(loginStrings[3])) {
+                        case 0:
+                            //Teacher
+                            break;
+                        case 1:
+                            //Student
+
+                            Intent intent = new Intent(MainActivity.this, StudentService.class);
+                            intent.putExtra("Login", loginStrings);
+                            startActivity(intent);
+                            finish();
+
+                            break;
+                    } //switch
+
 
                 } else {
                     //Password False
