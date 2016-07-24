@@ -1,5 +1,7 @@
 package tw.pitawanpor.twschool;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -20,7 +22,7 @@ public class SignUpActivity extends AppCompatActivity {
     private RadioGroup radioGroup;
     private RadioButton studentRadioButton, teacherRadioButton;
     private String nameString, surnameString, roomString, userString,
-            passwordString, statusString,QRcodeString;
+            passwordString, statusString = "1",QRcodeString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +39,27 @@ public class SignUpActivity extends AppCompatActivity {
         radioGroup = (RadioGroup) findViewById(R.id.ragStatus);
         studentRadioButton = (RadioButton) findViewById(R.id.radioButton);
         teacherRadioButton = (RadioButton) findViewById(R.id.radioButton2);
+
+        //การทำ Radio Controller
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+
+                switch (i) {
+                    case R.id.radioButton:
+                        // for Student
+                        statusString = "1";
+
+                        break;
+                    case R.id.radioButton2:
+                        // for Teacher
+                        statusString = "0";
+
+                        break;
+
+                }   //switch
+            }// onCheck
+        });
 
 
     }   //Main Method
@@ -61,9 +84,77 @@ public class SignUpActivity extends AppCompatActivity {
 
         } else {
             //No Space
+            switch (Integer.parseInt(statusString)) {
+
+                case 0:
+                    QRcodeString = "teacher_" + userString;
+                    break;
+                case 1:
+                    QRcodeString = "student_" + userString;
+                    break;
+
+            } // switch
+
+            confirmValue();
+
         } //if
 
 
 
     }   //clickSignUp
+
+    private void confirmValue() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setIcon(R.drawable.kon48);
+        builder.setTitle("โปรดตรวจสอบข้อมูล");
+        builder.setMessage("Name = "+nameString + "\n" +
+        "Surname = "+ surnameString + "\n" +
+                "Status = " + showStatus(statusString) + "\n" +
+        "Room = " + roomString + "\n" +
+                "User = " + userString + "\n" +
+        "Password = " + passwordString + "\n" +
+        "QRCode = " + QRcodeString);
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                upLoadValueToServer();
+                dialogInterface.dismiss();
+            }
+        });
+        builder.show();
+
+
+
+
+    }   // confirmValue
+
+    private void upLoadValueToServer() {
+
+    }   //upload
+
+    private String showStatus(String statusString) {
+
+        String result = null;
+        switch (Integer.parseInt(statusString)) {
+            case 0 :
+                result = "Teacher";
+                break;
+            case 1:
+                result = "Student";
+                break;
+        }
+
+        return result;
+    }
+
+
 }   //Main Class
