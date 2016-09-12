@@ -1,7 +1,8 @@
 package tw.pitawanpor.twschool;
 
-import android.support.v4.app.FragmentActivity;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -12,26 +13,24 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.squareup.okhttp.Call;
-import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
-import java.io.IOException;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class TeacherLogin extends FragmentActivity implements OnMapReadyCallback {
 
-    //eplicit
+    //Explicit
     private GoogleMap mMap;
-    private String[] userLoginStrings;
+    private String[] userLoginStrings, nameStudentStrings,
+            surnameStudentStrings, latStrings, lngStrings;
     private TextView textView;
-    private static final String urlJSON = "http://swiftcodingthai.com/tw/get_user_where_room.php";
+    private static final String urlJSON = "http://swiftcodingthai.com/tw/get_user_where_room_master.php";
     private String jsonString;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,65 +41,112 @@ public class TeacherLogin extends FragmentActivity implements OnMapReadyCallback
 
         userLoginStrings = getIntent().getStringArrayExtra("Login");
 
-        textView.setText(userLoginStrings[1]+ " "+
-        userLoginStrings[2]+" ห้อง "+ userLoginStrings[4]);
+        textView.setText(userLoginStrings[1] + " " +
+                userLoginStrings[2] + " ห้อง " + userLoginStrings[4]);
 
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-    } // main method
-
-
+    }   // Main Method
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // for Setup Center Map
-        final double twLat = 15.350600;  //Latitude ของ รร ตว
-        final double twLng = 100.492004;
+        //For Setup Center Map
+        final double twLat = 15.350664;   // Latitude ของ ตากฟ้า
+        final double twLng = 100.491939;
 
         LatLng latLng = new LatLng(twLat, twLng);
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
 
-        // for Marker School
+        //For Marker School
         mMap.addMarker(new MarkerOptions()
                 .position(latLng)
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.tw_logo48))
                 .title("โรงเรียนตากฟ้าวิชาประสิทธิ์")
                 .snippet("โรงเรียนมัธยมอันดับหนึ่งของ นครสวรรค์"));
 
-        //create student marker
-        OkHttpClient okHttpClient = new OkHttpClient();
-        RequestBody requestBody = new FormEncodingBuilder()
-                .add("isAdd", "true")
-                .add("Room", userLoginStrings[4])
-                .build();
-        Request.Builder builder = new Request.Builder();
+        //Create Student Marker
+        SynMyStudent synMyStudent = new SynMyStudent();
+        synMyStudent.execute();
 
-        Request request = builder.url(urlJSON).post(requestBody).build();
 
-        Call call = okHttpClient.newCall(request);
-        call.enqueue(new Callback() {
-            @Override
-            public void onFailure(Request request, IOException e) {
 
+
+
+
+    }   // onMapReady
+
+    private class SynMyStudent extends AsyncTask<Void, Void, String> {
+        @Override
+        protected String doInBackground(Void... voids) {
+
+            try {
+
+                OkHttpClient okHttpClient = new OkHttpClient();
+                RequestBody requestBody = new FormEncodingBuilder()
+                        .add("isAdd", "true")
+                        .add("Room", userLoginStrings[4])
+                        .build();
+                Request.Builder builder = new Request.Builder();
+                Request request = builder.url(urlJSON).post(requestBody).build();
+                Response response = okHttpClient.newCall(request).execute();
+                return response.body().string();
+
+
+            } catch (Exception e) {
+                return null;
             }
 
-            @Override
-            public void onResponse(Response response) throws IOException {
-                jsonString = response.body().string();
-                Log.d("12SepV2", "JSON ==> " + jsonString);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            Log.d("12SepV5", "JSON ==> " + s);
+
+            try {
+
+                JSONArray jsonArray = new JSONArray(s);
+                nameStudentStrings = new String[jsonArray.length()];
+                surnameStudentStrings = new String[jsonArray.length()];
+                latStrings = new String[jsonArray.length()];
+                lngStrings = new String[jsonArray.length()];
+
+                for (int i = 0; i < jsonArray.length(); i += 1) {
+
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    nameStudentStrings[i] = jsonObject.getString("Name");
+                    surnameStudentStrings[i] = jsonObject.getString("Surname");
+                    latStrings[i] = jsonObject.getString("Lat");
+                    lngStrings[i] = jsonObject.getString("Lng");
+
+                    Log.d("12SepV3", "Length ==> " + jsonArray.length());
+                    Log.d("12SepV3", "Name (" + i + ") = " + nameStudentStrings[i]);
+                    Log.d("12SepV3", "Lat(" + i + ") = " + latStrings[i]);
+                    Log.d("12SepV3", "Lng(" + i + ") = " + lngStrings[i]);
+
+                    addMyMarker(latStrings[i], lngStrings[i]);
+
+                }   // for
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
 
-            }//onresponse
-        });
 
 
 
 
-    } // onmapready
+    private void addMyMarker(String latString, String lngString) {
+        mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(Double.parseDouble(latString), Double.parseDouble(lngString))));
+    }
 
-} //main class
+}   // Main Class
