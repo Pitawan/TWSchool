@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         //Explicit
         private Context context;
         private String myUserString, myPassString, truePassString;
-        private static final String urlJSON = "http://swiftcodingthai.com/tw/get_user_pitawan.php";
+        private static final String urlJSON = "http://www.pitawanshop.com/tw/get_user_pitawan.php";
         private boolean statusABoolean = true;
         private String[] loginStrings = new String[8];
 

@@ -31,7 +31,7 @@ public class TeacherLogin extends FragmentActivity implements OnMapReadyCallback
     private String[] userLoginStrings, nameStudentStrings,
             surnameStudentStrings, latStrings, lngStrings;
     private TextView textView;
-    private static final String urlJSON = "http://swiftcodingthai.com/tw/get_user_where_room_master.php";
+    private static final String urlJSON = "http://pitawanshop.com/tw/get_user_where_room_master.php";
     private String jsonString;
 
     @Override

@@ -41,7 +41,7 @@ public class SignUpActivity extends AppCompatActivity {
     private RadioButton studentRadioButton, teacherRadioButton;
     private String nameString, surnameString, roomString, userString,
             passwordString, statusString = "1",QRcodeString;
-    private static final String urlPHP = "http://swiftcodingthai.com/tw/add_user_pitawan.php";
+    private static final String urlPHP = "http://pitawanshop.com/tw/add_user_pitawan.php";
     private Spinner spinner;
 
     @Override
@@ -98,7 +98,7 @@ public class SignUpActivity extends AppCompatActivity {
         //Explicit
         private Context context;
         private Spinner mySpinner;
-        private  static final String urlRoomJSON ="http://swiftcodingthai.com/tw/get_room_pitawan.php";
+        private  static final String urlRoomJSON ="http://pitawanshop.com/tw/get_room_pitawan.php";
         private String[] roomStrings;
 
 
