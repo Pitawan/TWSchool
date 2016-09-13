@@ -138,6 +138,8 @@ public class EditStudent extends FragmentActivity implements OnMapReadyCallback 
 
                 studentLatADouble = latLng.latitude;
                 studentLngADouble = latLng.longitude;
+                loginStrings[5] = Double.toString(studentLatADouble);
+                loginStrings[6] = Double.toString(studentLngADouble);
 
 
             }   // onMapClick
