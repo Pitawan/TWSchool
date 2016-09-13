@@ -2,6 +2,7 @@ package tw.pitawanpor.twschool;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -39,6 +40,16 @@ public class MainActivity extends AppCompatActivity {
 
 
     }   // Main Method
+
+    public void clickDeveloperBy(View view) {
+        String strURL = "https://youtu.be/A1ncrVtr9Es?list=PLDIyuhIJlsWdQMZ_rgjlt5vwjWIdYBmk3";
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+
+        intent.setData(Uri.parse(strURL));
+        startActivity(intent);
+
+
+    } // click developerBy
 
     //Create Inner Class
     private class SynchronizeUser extends AsyncTask<Void, Void, String> {
