@@ -113,8 +113,10 @@ public class EditStudent extends FragmentActivity implements OnMapReadyCallback 
 
 
         // for Setup Center Map
-        final double twLat = 15.350600;  //Latitude ของ รร ตว
-        final double twLng = 100.492004;
+        final double twLat =  15.351050;  //Latitude ของ รร ตว
+        final double twLng = 100.490821;
+
+        //
 
         LatLng latLng = new LatLng(twLat, twLng);
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));

@@ -77,9 +77,9 @@ public class TeacherLogin extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
 
         //For Setup Center Map
-        final double twLat = 15.350664;   // Latitude ของ ตากฟ้า
-        final double twLng = 100.491939;
-
+        final double twLat = 15.351050;   // Latitude ของ ตากฟ้า
+        final double twLng = 100.490821;
+// เดิม 15.350664  100.491939
         if (statusABoolean) {
             //Center==>student
             String strLat = getIntent().getStringExtra("Lat");
